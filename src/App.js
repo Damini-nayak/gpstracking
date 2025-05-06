@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
@@ -7,8 +7,16 @@ function App() {
   const [longitude, setLongitude] = useState();
   const [userAddress, setUserAddress] = useState();
 
+  useEffect(() => {
   const geo = navigator.geolocation;
-  geo.getCurrentPosition(userCoords)
+  geo.watchPosition(userCoords)
+  })
+
+  useEffect( ()=> {
+    if (latitude && longitude) {
+      getLiveLocation()
+    }
+  })
 
   function userCoords(position){
     let userLatitude = position.coords.latitude;
@@ -28,9 +36,9 @@ function App() {
     setUserAddress(data.results[0].formatted)
     }
     
-  const handleUserAddress = () => {
-    getLiveLocation()
-  }
+  // const handleUserAddress = () => {
+  //   getLiveLocation()
+  // }
 
   return (
     <>
@@ -39,7 +47,7 @@ function App() {
       <h6>Latitude : {latitude}</h6>
       <h6>Longitude :{longitude}</h6>
       <h4>Address : {userAddress}</h4>
-      <button onClick={handleUserAddress}>get Address</button>
+      {/* <button onClick={handleUserAddress}>get Address</button> */}
     </div>
     </>
   );
